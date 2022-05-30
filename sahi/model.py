@@ -5,6 +5,7 @@ import logging
 import warnings
 from typing import Dict, List, Optional
 
+import torch
 import numpy as np
 
 from sahi.sahi.prediction import ObjectPrediction
@@ -508,9 +509,10 @@ class YolorDetectionModel(DetectionModel):
         """
         # set model
         try:
+            imgsz = 640
             cfg = 'yolor/cfg/yolov4_p6.cfg'
             model = Darknet(cfg, imgsz).cuda()
-            model.load_state_dict(torch.load(weights[0], map_location=self.device)['model'])
+            model.load_state_dict(torch.load(self.model_path, map_location=self.device)['model'])
             model.to(self.device).eval()
             #model = attempt_load(weights, map_location=device)  # load FP32 model
             #imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
