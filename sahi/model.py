@@ -510,7 +510,7 @@ class YolorDetectionModel(DetectionModel):
         # set model
         try:
             imgsz = 640
-            cfg = 'yolor/cfg/yolov4_p6.cfg'
+            cfg = 'yolor/cfg/yolor_p6.cfg'
             model = Darknet(cfg, imgsz).cuda()
             model.load_state_dict(torch.load(self.model_path, map_location=self.device)['model'])
             model.to(self.device).eval()
