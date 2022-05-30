@@ -19,7 +19,7 @@ from sahi.sahi.postprocess.combine import (
     NMSPostprocess,
     PostprocessPredictions,
 )
-from sahi.prediction import ObjectPrediction, PredictionResult
+from sahi.sahi.prediction import ObjectPrediction, PredictionResult
 from sahi.sahi.slicing import slice_image
 from sahi.sahi.utils.coco import Coco, CocoImage
 from sahi.sahi.utils.cv import (
