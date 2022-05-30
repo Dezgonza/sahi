@@ -12,6 +12,8 @@ from sahi.sahi.utils.compatibility import fix_full_shape_list, fix_shift_amount_
 from sahi.sahi.utils.cv import get_bbox_from_bool_mask
 from sahi.sahi.utils.torch import cuda_is_available, empty_cuda_cache
 
+from yolor.models.models import *
+
 logger = logging.getLogger(__name__)
 
 
@@ -506,8 +508,16 @@ class YolorDetectionModel(DetectionModel):
         """
         # set model
         try:
-            model = yolov5.load(self.model_path, device=self.device)
-            model.conf = self.confidence_threshold
+            model = Darknet(cfg, imgsz).cuda()
+            model.load_state_dict(torch.load(weights[0], map_location=device)['model'])
+            modelo.to(self.device).eval()
+            #model = attempt_load(weights, map_location=device)  # load FP32 model
+            #imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
+            #model.to(device).eval()
+
+            #model = yolov5.load(self.model_path, device=self.device)
+            #model.conf = self.confidence_threshold
+            
             self.model = model
         except Exception as e:
             raise TypeError("model_path is not a valid yolov5 model path: ", e)
