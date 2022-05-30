@@ -4,8 +4,8 @@ from typing import List, Union
 import numpy as np
 import torch
 
-from sahi.annotation import BoundingBox, Category, Mask
-from sahi.prediction import ObjectPrediction
+from sahi.sahi.annotation import BoundingBox, Category, Mask
+from sahi.sahi.prediction import ObjectPrediction
 
 
 class ObjectPredictionList(Sequence):
