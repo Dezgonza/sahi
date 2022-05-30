@@ -509,8 +509,8 @@ class YolorDetectionModel(DetectionModel):
         # set model
         try:
             model = Darknet(cfg, imgsz).cuda()
-            model.load_state_dict(torch.load(weights[0], map_location=device)['model'])
-            modelo.to(self.device).eval()
+            model.load_state_dict(torch.load(weights[0], map_location=self.device)['model'])
+            model.to(self.device).eval()
             #model = attempt_load(weights, map_location=device)  # load FP32 model
             #imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
             #model.to(device).eval()
