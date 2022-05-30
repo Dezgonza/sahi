@@ -7,10 +7,10 @@ from typing import Dict, List, Optional, Union
 import numpy as np
 from PIL import Image
 
-from sahi.annotation import ObjectAnnotation
-from sahi.utils.coco import CocoAnnotation, CocoPrediction
-from sahi.utils.cv import read_image_as_pil, visualize_object_predictions
-from sahi.utils.file import Path
+from sahi.sahi.annotation import ObjectAnnotation
+from sahi.sahi.utils.coco import CocoAnnotation, CocoPrediction
+from sahi.sahi.utils.cv import read_image_as_pil, visualize_object_predictions
+from sahi.sahi.utils.file import Path
 
 
 class PredictionScore:

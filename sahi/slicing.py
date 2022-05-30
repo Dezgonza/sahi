@@ -13,9 +13,9 @@ from PIL import Image
 from shapely.errors import TopologicalError
 from tqdm import tqdm
 
-from sahi.utils.coco import Coco, CocoAnnotation, CocoImage, create_coco_dict
-from sahi.utils.cv import read_image_as_pil
-from sahi.utils.file import load_json, save_json
+from sahi.sahi.utils.coco import Coco, CocoAnnotation, CocoImage, create_coco_dict
+from sahi.sahi.utils.cv import read_image_as_pil
+from sahi.sahi.utils.file import load_json, save_json
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
