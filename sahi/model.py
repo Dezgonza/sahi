@@ -609,9 +609,9 @@ class YolorDetectionModel(DetectionModel):
             full_shape = None if full_shape_list is None else full_shape_list[image_ind]
             object_prediction_list = []
 
-            #s, im0 = '', im0s
+            s = ''
 
-            #s += '%gx%g ' % img.shape[2:]  # print string
+            s += '%gx%g ' % img_shape  # print string
 
             if image_predictions is not None and len(image_predictions):
                 # Rescale boxes from img_size to im0 size
