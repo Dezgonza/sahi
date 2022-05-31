@@ -616,18 +616,12 @@ class YolorDetectionModel(DetectionModel):
             s += '%gx%g ' % img_shape  # print string
 
             if image_predictions is not None and len(image_predictions):
-                print(image_predictions)
-                print(image_predictions.shape)
                 # Rescale boxes from img_size to im0 size
                 image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
 
                 # Print results
-                print(self.category_mapping)
-                print(image_predictions[:,-1])
                 for c in image_predictions[:, -1].unique():
                     n = (image_predictions[:, -1] == c).sum()  # detections per class
-                    print(c)
-                    print(int(c))
                     s += '%g %ss, ' % (n, self.category_mapping[int(c)])  # add to string
 
                 # Write results
