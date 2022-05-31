@@ -659,15 +659,14 @@ class YolorDetectionModel(DetectionModel):
                         shift_amount=shift_amount,
                         full_shape=full_shape,
                     )
-                    object_prediction_list.append(object_prediction)
 
-                object_prediction_list_per_image.append(object_prediction_list)
+                    object_prediction_list.append(object_prediction)
 
             # Print time (inference + NMS)
             print('%sDone.' % (s))
 
-            # process predictions
-            #for prediction in image_predictions_in_xyxy_format.cpu().detach().numpy():
+            object_prediction_list_per_image.append(object_prediction_list)
+
 
         self._object_prediction_list_per_image = object_prediction_list_per_image
 
