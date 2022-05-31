@@ -555,7 +555,7 @@ class YolorDetectionModel(DetectionModel):
         print(image)
         prediction_result = self.model(image)[0]
 
-        prediction_result = non_max_suppression(prediction_result, self.confidence_threshold, 0.5, classes=self.category_mapping, agnostic=True)
+        prediction_result = non_max_suppression(prediction_result, self.confidence_threshold, 0.5, classes=None, agnostic=True)
 
         self._original_predictions = prediction_result
 
