@@ -539,11 +539,6 @@ class YolorDetectionModel(DetectionModel):
             image_size: int
                 Inference input size.
         """
-        try:
-            import yolov5
-        except ImportError:
-            raise ImportError('Please run "pip install -U yolov5" ' "to install YOLOv5 first for YOLOv5 inference.")
-
         # Confirm model is loaded
         assert self.model is not None, "Model is not loaded, load it by calling .load_model()"
 

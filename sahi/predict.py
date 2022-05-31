@@ -35,6 +35,7 @@ from sahi.sahi.utils.file import Path, import_class, increment_path, list_files,
 
 MODEL_TYPE_TO_MODEL_CLASS_NAME = {
     "mmdet": "MmdetDetectionModel",
+    "yolor": "YolorDetectionModel",
     "yolov5": "Yolov5DetectionModel",
     "detectron2": "Detectron2DetectionModel",
 }
