@@ -545,8 +545,10 @@ class YolorDetectionModel(DetectionModel):
         np_image = np.copy(image)
         image = torch.tensor(np_image)
         print(image.shape)
-        image = torch.tensor([np_image])
+        image = torch.permute(image, (1, 2, 0))
         print(image.shape)
+        #image = torch.tensor([np_image])
+        #print(image.shape)
 
         if image_size is not None:
             warnings.warn("Set 'image_size' at DetectionModel init.", DeprecationWarning)
