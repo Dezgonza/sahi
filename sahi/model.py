@@ -545,7 +545,7 @@ class YolorDetectionModel(DetectionModel):
         np_image = np.copy(image)
         image = torch.tensor(np_image)
         print(image.shape)
-        image = torch.permute(image, (1, 2, 0))
+        image = torch.permute(image, (2, 0, 1))
         print(image.shape)
         #image = torch.tensor([np_image])
         #print(image.shape)
