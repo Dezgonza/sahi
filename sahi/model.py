@@ -553,6 +553,7 @@ class YolorDetectionModel(DetectionModel):
         #image = torch.tensor([np_image])
         #print(image.shape)
 
+        print(image)
         prediction_result = self.model(image)
 
         self._original_predictions = prediction_result
@@ -614,14 +615,15 @@ class YolorDetectionModel(DetectionModel):
             s += '%gx%g ' % img_shape  # print string
 
             if image_predictions is not None and len(image_predictions):
+                print(image_predictions)
                 # Rescale boxes from img_size to im0 size
                 image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
 
                 # Print results
+                print(self.category_mapping)
                 print(image_predictions[:,-1])
                 for c in image_predictions[:, -1].unique():
                     n = (image_predictions[:, -1] == c).sum()  # detections per class
-                    print(self.category_mapping)
                     print(c)
                     print(int(c))
                     s += '%g %ss, ' % (n, self.category_mapping[int(c)])  # add to string
