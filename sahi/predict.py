@@ -107,6 +107,8 @@ def get_prediction(
     )
     object_prediction_list: List[ObjectPrediction] = detection_model.object_prediction_list
 
+    print(object_prediction_list)
+
     # postprocess matching predictions
     if postprocess is not None:
         object_prediction_list = postprocess(object_prediction_list)

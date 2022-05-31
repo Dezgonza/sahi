@@ -453,6 +453,7 @@ class Yolov5DetectionModel(DetectionModel):
         shift_amount_list = fix_shift_amount_list(shift_amount_list)
         full_shape_list = fix_full_shape_list(full_shape_list)
 
+        object_prediction_list_per_image = []
         for image_ind, image_predictions_in_xyxy_format in enumerate(original_predictions.xyxy):
             shift_amount = shift_amount_list[image_ind]
             full_shape = None if full_shape_list is None else full_shape_list[image_ind]
@@ -544,11 +545,9 @@ class YolorDetectionModel(DetectionModel):
 
         image = np.array(image / 255).astype(np.float32)
         image = torch.tensor(image)
-        print(image.shape)
+        image = torch.resize((image_size,image_size))
         image = torch.permute(image, (2, 0, 1))
-        print(image.shape)
         image = torch.unsqueeze(image, 0)
-        print(image.shape)
         #image = torch.tensor([np_image])
         #print(image.shape)
 
@@ -603,7 +602,79 @@ class YolorDetectionModel(DetectionModel):
         shift_amount_list = fix_shift_amount_list(shift_amount_list)
         full_shape_list = fix_full_shape_list(full_shape_list)
 
-        self._object_prediction_list_per_image = original_predictions
+        img_shape = (640,640)
+        im0_shape = (full_shape_list[0][0],full_shape_list[0][1])
+
+        # Process detections
+        object_prediction_list_per_image = []
+        for image_ind, image_predictions in enumerate(original_predictions):  # detections per image
+
+            shift_amount = shift_amount_list[image_ind]
+            full_shape = None if full_shape_list is None else full_shape_list[image_ind]
+            object_prediction_list = []
+
+            #s, im0 = '', im0s
+
+            #s += '%gx%g ' % img.shape[2:]  # print string
+
+            if image_predictions is not None and len(image_predictions):
+                # Rescale boxes from img_size to im0 size
+                image_predictions[:, :4] = scale_coords(img_shape[2:], image_predictions[:, :4], im0_shape).round()
+
+                # Print results
+                for c in image_predictions[:, -1].unique():
+                    n = (image_predictions[:, -1] == c).sum()  # detections per class
+                    s += '%g %ss, ' % (n, self.category_mapping[int(c)])  # add to string
+
+                # Write results
+                for *xyxy, conf, cls in image_predictions:
+                    x1 = int(xyxy[0])
+                    y1 = int(xyxy[1])
+                    x2 = int(xyxy[2])
+                    y2 = int(xyxy[3])
+                    bbox = [x1, y1, x2, y2]
+                    score = conf
+                    category_id = int(cls)
+                    category_name = self.category_mapping[str(category_id)]
+
+                    # fix negative box coords
+                    bbox[0] = max(0, bbox[0])
+                    bbox[1] = max(0, bbox[1])
+                    bbox[2] = max(0, bbox[2])
+                    bbox[3] = max(0, bbox[3])
+
+                    # fix out of image box coords
+                    if full_shape is not None:
+                        bbox[0] = min(full_shape[1], bbox[0])
+                        bbox[1] = min(full_shape[0], bbox[1])
+                        bbox[2] = min(full_shape[1], bbox[2])
+                        bbox[3] = min(full_shape[0], bbox[3])
+
+                    # ignore invalid predictions
+                    if not (bbox[0] < bbox[2]) or not (bbox[1] < bbox[3]):
+                        logger.warning(f"ignoring invalid prediction with bbox: {bbox}")
+                        continue
+
+                    object_prediction = ObjectPrediction(
+                        bbox=bbox,
+                        category_id=category_id,
+                        score=score,
+                        bool_mask=None,
+                        category_name=category_name,
+                        shift_amount=shift_amount,
+                        full_shape=full_shape,
+                    )
+                    object_prediction_list.append(object_prediction)
+
+                object_prediction_list_per_image.append(object_prediction_list)
+
+            # Print time (inference + NMS)
+            print('%sDone.' % (s))
+
+            # process predictions
+            #for prediction in image_predictions_in_xyxy_format.cpu().detach().numpy():
+
+        self._object_prediction_list_per_image = object_prediction_list_per_image
 
 
 class Detectron2DetectionModel(DetectionModel):
