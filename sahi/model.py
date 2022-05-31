@@ -411,7 +411,6 @@ class Yolov5DetectionModel(DetectionModel):
         else:
             prediction_result = self.model(image)
 
-        prediction_result = non_max_suppression(prediction_result[0], self.confidence_threshold, 0.5, classes=self.category_mapping, agnostic=True)
         self._original_predictions = prediction_result
 
     @property
@@ -554,7 +553,9 @@ class YolorDetectionModel(DetectionModel):
         #print(image.shape)
 
         print(image)
-        prediction_result = self.model(image)
+        prediction_result = self.model(image)[0]
+
+        prediction_result = non_max_suppression(prediction_result, self.confidence_threshold, 0.5, classes=self.category_mapping, agnostic=True)
 
         self._original_predictions = prediction_result
 
