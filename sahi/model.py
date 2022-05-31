@@ -620,6 +620,9 @@ class YolorDetectionModel(DetectionModel):
                 # Print results
                 for c in image_predictions[:, -1].unique():
                     n = (image_predictions[:, -1] == c).sum()  # detections per class
+                    print(self.category_mapping)
+                    print(c)
+                    print(int(c))
                     s += '%g %ss, ' % (n, self.category_mapping[int(c)])  # add to string
 
                 # Write results
