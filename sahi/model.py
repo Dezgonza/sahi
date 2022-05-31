@@ -553,13 +553,7 @@ class YolorDetectionModel(DetectionModel):
         #image = torch.tensor([np_image])
         #print(image.shape)
 
-        if image_size is not None:
-            warnings.warn("Set 'image_size' at DetectionModel init.", DeprecationWarning)
-            prediction_result = self.model(image, size=image_size)
-        elif self.image_size is not None:
-            prediction_result = self.model(image, size=self.image_size)
-        else:
-            prediction_result = self.model(image)
+        prediction_result = self.model(image)
 
         self._original_predictions = prediction_result
 
