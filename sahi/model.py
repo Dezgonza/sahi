@@ -639,7 +639,7 @@ class YolorDetectionModel(DetectionModel):
                     bbox = [x1, y1, x2, y2]
                     score = conf
                     category_id = int(cls)
-                    category_name = self.category_mapping[str(category_id)]
+                    category_name = self.category_mapping[category_id]
 
                     # fix negative box coords
                     bbox[0] = max(0, bbox[0])
