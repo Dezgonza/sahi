@@ -2,9 +2,11 @@
 # Code written by Fatih C Akyon, 2020.
 
 import logging
+from tkinter import image_names
 import warnings
 from typing import Dict, List, Optional
 
+import cv2
 import torch
 import numpy as np
 
@@ -543,9 +545,9 @@ class YolorDetectionModel(DetectionModel):
         # Confirm model is loaded
         assert self.model is not None, "Model is not loaded, load it by calling .load_model()"
 
+        cv2.resize(image, (image_size,image_size))
         image = np.array(image / 255).astype(np.float32)
         image = torch.tensor(image)
-        image = torch.resize((image_size,image_size))
         image = torch.permute(image, (2, 0, 1))
         image = torch.unsqueeze(image, 0)
         #image = torch.tensor([np_image])
