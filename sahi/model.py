@@ -618,6 +618,7 @@ class YolorDetectionModel(DetectionModel):
                 image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
 
                 # Print results
+                print(image_predictions)
                 for c in image_predictions[:, -1].unique():
                     n = (image_predictions[:, -1] == c).sum()  # detections per class
                     print(self.category_mapping)
