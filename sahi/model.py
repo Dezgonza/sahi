@@ -542,8 +542,12 @@ class YolorDetectionModel(DetectionModel):
         # Confirm model is loaded
         assert self.model is not None, "Model is not loaded, load it by calling .load_model()"
 
-        image = torch.tensor(image)
-        
+        np_image = np.copy(image)
+        image = torch.tensor(np_image)
+        print(image.shape)
+        image = torch.tensor([np_image])
+        print(image.shape)
+
         if image_size is not None:
             warnings.warn("Set 'image_size' at DetectionModel init.", DeprecationWarning)
             prediction_result = self.model(image, size=image_size)
