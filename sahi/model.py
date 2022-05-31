@@ -628,7 +628,7 @@ class YolorDetectionModel(DetectionModel):
                     x2 = int(xyxy[2])
                     y2 = int(xyxy[3])
                     bbox = [x1, y1, x2, y2]
-                    score = int(conf)
+                    score = conf.item()
                     category_id = int(cls)
                     category_name = self.category_mapping[category_id]
 
