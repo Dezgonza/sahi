@@ -121,6 +121,7 @@ def get_prediction(
             "seconds.",
         )
 
+    print(type(image))
     return PredictionResult(
         image=image, object_prediction_list=object_prediction_list, durations_in_seconds=durations_in_seconds
     )
