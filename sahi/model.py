@@ -549,10 +549,7 @@ class YolorDetectionModel(DetectionModel):
         image = torch.tensor(image)
         image = torch.permute(image, (2, 0, 1))
         image = torch.unsqueeze(image, 0)
-        #image = torch.tensor([np_image])
-        #print(image.shape)
 
-        print(image)
         prediction_result = self.model(image)[0]
 
         prediction_result = non_max_suppression(prediction_result, self.confidence_threshold, 0.5, classes=None, agnostic=True)
