@@ -542,10 +542,11 @@ class YolorDetectionModel(DetectionModel):
         # Confirm model is loaded
         assert self.model is not None, "Model is not loaded, load it by calling .load_model()"
 
-        np_image = np.copy(image)
-        image = torch.tensor(np_image)
+        image = torch.tensor(image)
         print(image.shape)
         image = torch.permute(image, (2, 0, 1))
+        print(image.shape)
+        image = torch.unsqueeze(image, 0)
         print(image.shape)
         #image = torch.tensor([np_image])
         #print(image.shape)
