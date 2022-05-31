@@ -14,6 +14,7 @@ from sahi.sahi.utils.cv import get_bbox_from_bool_mask
 from sahi.sahi.utils.torch import cuda_is_available, empty_cuda_cache
 
 from yolor.models.models import *
+from yolor.utils.general import (non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer)
 
 logger = logging.getLogger(__name__)
 
@@ -408,6 +409,7 @@ class Yolov5DetectionModel(DetectionModel):
         else:
             prediction_result = self.model(image)
 
+        prediction_result = non_max_suppression(prediction_result[0], self.confidence_threshold, 0.5, classes=self.category_mapping, agnostic=True)
         self._original_predictions = prediction_result
 
     @property
@@ -451,8 +453,6 @@ class Yolov5DetectionModel(DetectionModel):
         shift_amount_list = fix_shift_amount_list(shift_amount_list)
         full_shape_list = fix_full_shape_list(full_shape_list)
 
-        # handle all predictions
-        object_prediction_list_per_image = []
         for image_ind, image_predictions_in_xyxy_format in enumerate(original_predictions.xyxy):
             shift_amount = shift_amount_list[image_ind]
             full_shape = None if full_shape_list is None else full_shape_list[image_ind]
@@ -603,55 +603,7 @@ class YolorDetectionModel(DetectionModel):
         shift_amount_list = fix_shift_amount_list(shift_amount_list)
         full_shape_list = fix_full_shape_list(full_shape_list)
 
-        # handle all predictions
-        object_prediction_list_per_image = []
-        for image_ind, image_predictions_in_xyxy_format in enumerate(original_predictions.xyxy):
-            shift_amount = shift_amount_list[image_ind]
-            full_shape = None if full_shape_list is None else full_shape_list[image_ind]
-            object_prediction_list = []
-
-            # process predictions
-            for prediction in image_predictions_in_xyxy_format.cpu().detach().numpy():
-                x1 = int(prediction[0])
-                y1 = int(prediction[1])
-                x2 = int(prediction[2])
-                y2 = int(prediction[3])
-                bbox = [x1, y1, x2, y2]
-                score = prediction[4]
-                category_id = int(prediction[5])
-                category_name = self.category_mapping[str(category_id)]
-
-                # fix negative box coords
-                bbox[0] = max(0, bbox[0])
-                bbox[1] = max(0, bbox[1])
-                bbox[2] = max(0, bbox[2])
-                bbox[3] = max(0, bbox[3])
-
-                # fix out of image box coords
-                if full_shape is not None:
-                    bbox[0] = min(full_shape[1], bbox[0])
-                    bbox[1] = min(full_shape[0], bbox[1])
-                    bbox[2] = min(full_shape[1], bbox[2])
-                    bbox[3] = min(full_shape[0], bbox[3])
-
-                # ignore invalid predictions
-                if not (bbox[0] < bbox[2]) or not (bbox[1] < bbox[3]):
-                    logger.warning(f"ignoring invalid prediction with bbox: {bbox}")
-                    continue
-
-                object_prediction = ObjectPrediction(
-                    bbox=bbox,
-                    category_id=category_id,
-                    score=score,
-                    bool_mask=None,
-                    category_name=category_name,
-                    shift_amount=shift_amount,
-                    full_shape=full_shape,
-                )
-                object_prediction_list.append(object_prediction)
-            object_prediction_list_per_image.append(object_prediction_list)
-
-        self._object_prediction_list_per_image = object_prediction_list_per_image
+        self._object_prediction_list_per_image = original_predictions
 
 
 class Detectron2DetectionModel(DetectionModel):
