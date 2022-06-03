@@ -598,7 +598,7 @@ class YolorDetectionModel(DetectionModel):
         full_shape_list = fix_full_shape_list(full_shape_list)
 
         img_shape = (1280,1280)
-        im0_shape = (full_shape_list[0][1],full_shape_list[0][0])
+        im0_shape = (full_shape_list[0][0],full_shape_list[0][1])
 
         # Process detections
         object_prediction_list_per_image = []
@@ -614,7 +614,7 @@ class YolorDetectionModel(DetectionModel):
 
             if image_predictions is not None and len(image_predictions):
                 # Rescale boxes from img_size to im0 size
-                image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
+                #image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
 
                 # Print results
                 for c in image_predictions[:, -1].unique():
