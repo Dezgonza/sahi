@@ -598,7 +598,7 @@ class YolorDetectionModel(DetectionModel):
         full_shape_list = fix_full_shape_list(full_shape_list)
 
         img_shape = (1280,1280)
-        im0_shape = (full_shape_list[0][0],full_shape_list[0][1])
+        im0_shape = (full_shape_list[0][1],full_shape_list[0][0])
 
         # Process detections
         object_prediction_list_per_image = []
