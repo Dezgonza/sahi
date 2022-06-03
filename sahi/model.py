@@ -614,7 +614,7 @@ class YolorDetectionModel(DetectionModel):
 
             if image_predictions is not None and len(image_predictions):
                 # Rescale boxes from img_size to im0 size
-                image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
+                #image_predictions[:, :4] = scale_coords(img_shape, image_predictions[:, :4], im0_shape).round()
 
                 # Print results
                 for c in image_predictions[:, -1].unique():
